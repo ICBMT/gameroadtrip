@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Open Road — Infinite Drive</title>
+    <link rel="stylesheet" href="/src/ui/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="game"></canvas>
+      <div id="hud" class="hidden">
+        <div class="hud-speed"><span id="hud-speed">0</span><small>km/h</small></div>
+        <div class="hud-row">
+          <div><label>Distance</label><span id="hud-distance">0.0 km</span></div>
+          <div><label>Biome</label><span id="hud-biome">—</span></div>
+          <div><label>Time</label><span id="hud-time">--:--</span></div>
+          <div><label>Weather</label><span id="hud-weather">Clear</span></div>
+        </div>
+        <div id="hud-toast" class="toast hidden"></div>
+        <div id="hud-hint" class="hint">Esc: menu · C: camera · T: time · V: weather · H: HUD</div>
+      </div>
+      <div id="menu" class="overlay">
+        <div class="panel" id="menu-main">
+          <h1>OPEN ROAD</h1>
+          <p class="tagline">An endless procedural drive.</p>
+          <button data-action="play" class="primary">Play</button>
+          <button data-action="settings">Settings</button>
+          <button data-action="controls">Controls</button>
+          <button data-action="about">About</button>
+        </div>
+        <div class="panel hidden" id="menu-settings">
+          <h2>Settings</h2>
+          <label class="row">Time of day
+            <select id="set-time"><option value="auto">Real time</option><option value="fixed">Fixed (use slider)</option></select>
+          </label>
+          <label class="row">Time slider <input id="set-time-slider" type="range" min="0" max="24" step="0.1" value="10" /></label>
+          <label class="row">Weather
+            <select id="set-weather"><option value="auto">Cycle</option><option value="clear">Clear</option><option value="cloudy">Cloudy</option><option value="rain">Rain</option><option value="fog">Fog</option></select>
+          </label>
+          <label class="row">Render distance
+            <select id="set-view"><option value="2">Near</option><option value="3" selected>Normal</option><option value="4">Far</option></select>
+          </label>
+          <label class="row">Volume <input id="set-volume" type="range" min="0" max="1" step="0.05" value="0.6" /></label>
+          <label class="row">Show HUD <input id="set-hud" type="checkbox" checked /></label>
+          <button data-action="back">Back</button>
+        </div>
+        <div class="panel hidden" id="menu-controls">
+          <h2>Controls</h2>
+          <table>
+            <tr><td>W / ↑</td><td>Accelerate</td></tr>
+            <tr><td>S / ↓</td><td>Brake / Reverse</td></tr>
+            <tr><td>A / ←, D / →</td><td>Steer</td></tr>
+            <tr><td>Space</td><td>Handbrake</td></tr>
+            <tr><td>R</td><td>Reset vehicle onto road</td></tr>
+            <tr><td>C</td><td>Cycle camera (Chase, Close, Hood, First person)</td></tr>
+            <tr><td>T</td><td>Cycle time of day mode</td></tr>
+            <tr><td>V</td><td>Cycle weather</td></tr>
+            <tr><td>H</td><td>Toggle HUD</td></tr>
+            <tr><td>Esc / P</td><td>Pause menu</td></tr>
+            <tr><td>Gamepad</td><td>Left stick steer, RT accelerate, LT brake, A handbrake</td></tr>
+          </table>
+          <button data-action="back">Back</button>
+        </div>
+        <div class="panel hidden" id="menu-about">
+          <h2>About</h2>
+          <p>Open Road is an original procedural driving game. The world is generated from a seed, streamed in chunks, and never ends.</p>
+          <p class="muted">Built with TypeScript, Three.js and Vite.</p>
+          <button data-action="back">Back</button>
+        </div>
+        <div class="panel hidden" id="menu-pause">
+          <h2>Paused</h2>
+          <button data-action="resume" class="primary">Resume</button>
+          <button data-action="settings">Settings</button>
+          <button data-action="quit">Main menu</button>
+          <div class="stats" id="stats"></div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
