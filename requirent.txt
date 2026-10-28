@@ -1,0 +1,937 @@
+# Build an Open-World Infinite Driving Game
+
+You are the lead game developer and technical architect.
+
+Build a browser-based 3D driving game inspired by the relaxing endless-driving concept of Slow Roads, but **do not copy its code, assets, branding, UI, or distinctive visual identity**.
+
+The goal is to create a much more ambitious experience:
+
+> **An infinite procedural road-trip game where the player can drive continuously through natural landscapes, rural areas, towns, suburbs, and large cities without loading screens or reaching a fixed world boundary.**
+
+The game should feel like one enormous continuously generated world.
+
+---
+
+# 1. CORE EXPERIENCE
+
+The player controls a car from a third-person driving camera.
+
+The world continuously generates around the player as they drive.
+
+The player should be able to:
+
+- Drive indefinitely.
+- Travel through forests.
+- Drive through mountains.
+- Cross plains and valleys.
+- Pass farms and rural buildings.
+- Enter villages.
+- Enter towns.
+- Transition into suburbs.
+- Enter dense cities.
+- Leave cities and return to countryside.
+- Encounter rivers, bridges, tunnels, coastlines, lakes and other landmarks.
+- Follow roads that curve, climb, descend and branch.
+- Take turns and choose different routes.
+- Explore rather than simply follow one endlessly repeating road.
+
+There should be **no traditional level boundary**.
+
+The world should feel procedurally generated and effectively infinite.
+
+---
+
+# 2. IMPORTANT DESIGN GOAL
+
+Do NOT create a simple straight endless road.
+
+The world needs a proper procedural road network.
+
+The player should encounter:
+
+- Main highways
+- Country roads
+- Mountain roads
+- City streets
+- Residential streets
+- Industrial roads
+- Downtown streets
+- Ring roads
+- Bridges
+- Intersections
+- Roundabouts
+- T-junctions
+- Four-way intersections
+- Highway exits
+- Merging roads
+- Forks
+- Dead-end optional roads
+- Scenic routes
+
+The player should be able to make meaningful driving choices.
+
+For example:
+
+COUNTRYSIDE
+↓
+SMALL TOWN
+↓
+HIGHWAY
+↓
+SUBURBS
+↓
+CITY
+↓
+CITY OUTSKIRTS
+↓
+MOUNTAINS
+↓
+FOREST
+↓
+COAST
+↓
+ANOTHER CITY
+
+This transition should happen naturally.
+
+---
+
+# 3. PROCEDURAL WORLD
+
+Create a procedural world-generation system.
+
+The world should be generated from a deterministic seed.
+
+Given the same seed and player position, the same environment should be regenerated.
+
+Use chunk-based generation.
+
+For example:
+
+World
+├── Chunk
+├── Chunk
+├── Chunk
+├── Chunk
+└── ...
+
+Only generate chunks close enough to the player to be visible/useful.
+
+Unload distant chunks to keep memory usage low.
+
+The system must support:
+
+- World coordinates
+- Chunk coordinates
+- Deterministic generation
+- Seeded randomness
+- Procedural terrain
+- Procedural roads
+- Procedural vegetation
+- Procedural buildings
+- Procedural cities
+- Procedural landmarks
+
+The player should never see an obvious "chunk loading wall."
+
+---
+
+# 4. SEAMLESS WORLD STREAMING
+
+The player should be able to drive continuously without:
+
+- Loading screens
+- Teleportation
+- Visible chunk popping
+- Abrupt biome changes
+- Roads suddenly ending
+- Buildings appearing directly in front of the player
+
+Generate upcoming terrain before the player reaches it.
+
+Use a streaming radius around the player.
+
+Prioritize generation in this order:
+
+1. Road
+2. Terrain
+3. Nearby collision objects
+4. Buildings
+5. Vegetation
+6. Decorative objects
+7. Distant scenery
+
+Use lower-detail representations for distant objects.
+
+---
+
+# 5. TERRAIN SYSTEM
+
+Create procedural terrain with smooth elevation changes.
+
+Terrain should support:
+
+- Hills
+- Mountains
+- Valleys
+- Plains
+- Cliffs
+- Forest regions
+- Coastlines
+- Lakes
+- Rivers
+
+Avoid obviously repetitive noise.
+
+Use layered procedural noise or another suitable procedural terrain technique.
+
+Roads must conform naturally to terrain.
+
+Avoid roads floating above terrain or clipping through hills.
+
+---
+
+# 6. BIOME SYSTEM
+
+Create a biome system.
+
+At minimum support:
+
+### Forest
+
+Dense trees, grass, dirt paths, hills.
+
+### Countryside
+
+Fields, farms, fences, barns and scattered houses.
+
+### Mountain
+
+Steep terrain, cliffs, rock formations, sparse vegetation and winding roads.
+
+### Coastal
+
+Ocean, beaches, cliffs and coastal roads.
+
+### Village
+
+Small houses, narrow roads and modest density.
+
+### Town
+
+More buildings, intersections, shops and traffic.
+
+### Suburban
+
+Houses, sidewalks, driveways, trees and local roads.
+
+### City
+
+Dense buildings, multiple lanes, intersections, traffic, sidewalks, streetlights and larger structures.
+
+### Downtown
+
+High-density buildings, major intersections, urban lighting and significant traffic.
+
+Biomes must transition gradually rather than suddenly switching.
+
+---
+
+# 7. CITY GENERATION
+
+Cities are a major feature.
+
+Do not simply place random buildings beside the road.
+
+Generate coherent city layouts.
+
+A city should have:
+
+- Districts
+- Main roads
+- Side streets
+- Residential areas
+- Commercial areas
+- Industrial areas
+- Downtown
+- Parks
+- Parking areas
+- Intersections
+- Traffic lights
+- Sidewalks
+- Buildings with varying heights
+
+Cities should have recognizable structure.
+
+Example:
+
+OUTER CITY
+→ SUBURBS
+→ COMMERCIAL DISTRICT
+→ DENSE RESIDENTIAL
+→ DOWNTOWN
+→ INDUSTRIAL AREA
+→ OUTER CITY
+
+Cities should be procedurally generated from the world seed.
+
+---
+
+# 8. CITY-TO-COUNTRYSIDE TRANSITIONS
+
+This is one of the most important features.
+
+Do not make:
+
+COUNTRY → CITY WALL
+
+Instead create a transition:
+
+FOREST
+→ scattered houses
+→ farms
+→ village
+→ small town
+→ suburban houses
+→ commercial buildings
+→ multi-lane roads
+→ dense city
+
+Leaving a city should work in reverse.
+
+This should feel like a genuine road trip.
+
+---
+
+# 9. ROAD NETWORK
+
+Create a procedural graph-based road system.
+
+Roads should be represented as connected nodes and segments.
+
+Each road segment should know:
+
+- Start point
+- End point
+- Width
+- Number of lanes
+- Road type
+- Speed category
+- Terrain relationship
+- Connected roads
+
+Use different road-generation rules for:
+
+- Rural roads
+- Highways
+- Town roads
+- Residential roads
+- City roads
+
+Roads should have smooth curves.
+
+Avoid sharp unnatural turns unless intentionally generated.
+
+---
+
+# 10. INTERSECTIONS
+
+Generate actual intersections.
+
+Support:
+
+- T intersections
+- 4-way intersections
+- Roundabouts
+- Highway merges
+- Highway exits
+- Forks
+- Crossroads
+
+Intersections must connect correctly.
+
+No floating roads.
+
+No roads ending in buildings.
+
+No impossible road geometry.
+
+---
+
+# 11. DRIVING
+
+Create satisfying arcade-style driving.
+
+The car should have:
+
+- Acceleration
+- Braking
+- Steering
+- Reverse
+- Friction
+- Grip
+- Drifting/sliding at appropriate speeds
+- Gravity
+- Suspension movement
+
+The handling should be accessible and relaxing rather than a hardcore simulator.
+
+Keyboard controls:
+
+W / Arrow Up = Accelerate
+
+S / Arrow Down = Brake / Reverse
+
+A / Arrow Left = Steer Left
+
+D / Arrow Right = Steer Right
+
+Space = Handbrake
+
+R = Reset vehicle
+
+Add gamepad support if practical.
+
+---
+
+# 12. CAMERA
+
+Use a smooth third-person chase camera.
+
+Camera should:
+
+- Follow the vehicle smoothly.
+- Look toward the direction of travel.
+- Slightly lag behind steering.
+- Adjust distance based on speed.
+- Avoid clipping through terrain/buildings.
+- Provide a cinematic feeling.
+
+Allow optional camera modes:
+
+1. Chase
+2. Close Chase
+3. Hood
+4. First Person
+
+---
+
+# 13. TRAFFIC
+
+Add procedural AI traffic.
+
+Vehicles should:
+
+- Follow roads.
+- Stay in lanes.
+- Slow down.
+- Stop at intersections.
+- React to other vehicles.
+- Turn at intersections.
+- Enter and leave highways.
+- Spawn/despawn intelligently.
+
+Traffic density should depend on environment.
+
+Example:
+
+Forest:
+Very little traffic.
+
+Rural:
+Low traffic.
+
+Town:
+Moderate traffic.
+
+Suburb:
+Moderate traffic.
+
+City:
+High traffic.
+
+Downtown:
+Very high traffic.
+
+Do not spawn traffic directly in front of the player.
+
+---
+
+# 14. BUILDINGS
+
+Create procedural building generation.
+
+Buildings should vary in:
+
+- Height
+- Width
+- Shape
+- Color/material
+- Windows
+- Roof style
+
+Use different building generators for:
+
+- Farms
+- Rural houses
+- Village houses
+- Suburban houses
+- Shops
+- Offices
+- Apartments
+- Industrial buildings
+- Downtown skyscrapers
+
+Use instancing and LOD to keep performance reasonable.
+
+---
+
+# 15. VEGETATION
+
+Generate procedural:
+
+- Trees
+- Bushes
+- Grass
+- Rocks
+- Flowers
+- Crops
+
+Use instancing wherever possible.
+
+Do not create thousands of expensive individual objects.
+
+---
+
+# 16. LANDMARKS
+
+Generate occasional memorable landmarks.
+
+Examples:
+
+- Large bridge
+- Mountain pass
+- Wind farm
+- Radio tower
+- Lighthouse
+- Dam
+- Lake
+- Large stadium
+- Factory
+- Airport
+- Monument
+- Tunnel
+- Coastal viewpoint
+
+Landmarks should be relatively rare.
+
+They should help the world feel like a real journey instead of pure procedural noise.
+
+---
+
+# 17. TIME OF DAY
+
+Add a dynamic time system.
+
+The world should transition smoothly through:
+
+Morning
+→ Day
+→ Evening
+→ Sunset
+→ Night
+→ Sunrise
+
+Lighting should change naturally.
+
+Add:
+
+- Sun movement
+- Sky color changes
+- Night lighting
+- Building lights
+- Street lights
+- Vehicle headlights
+
+Allow the player to optionally control time or use real-time progression.
+
+---
+
+# 18. WEATHER
+
+Implement a scalable weather system.
+
+At minimum:
+
+- Clear
+- Cloudy
+- Rain
+- Fog
+
+Optional later:
+
+- Heavy rain
+- Storm
+- Snow
+
+Weather should affect atmosphere.
+
+Rain can optionally affect vehicle grip slightly.
+
+Do not make weather overly distracting.
+
+---
+
+# 19. AUDIO
+
+Create immersive ambient audio.
+
+Include:
+
+- Engine sound
+- Tire sounds
+- Wind
+- Rain
+- Forest ambience
+- City ambience
+- Traffic
+- Birds
+- Water
+- Tunnel reverb
+
+Audio should change depending on environment.
+
+Example:
+
+Forest → birds + wind
+
+City → traffic + distant urban ambience
+
+Tunnel → engine echo
+
+Coast → wind + waves
+
+---
+
+# 20. GRAPHICS
+
+Target a polished stylized 3D aesthetic.
+
+The game should look impressive while remaining browser-friendly.
+
+Prioritize:
+
+- Good lighting
+- Atmospheric perspective
+- Procedural detail
+- Smooth terrain
+- Attractive roads
+- Strong environmental variety
+
+Do not prioritize extremely high-poly assets.
+
+Performance matters more than raw polygon count.
+
+---
+
+# 21. WEB TECHNOLOGY
+
+Build this as a browser game.
+
+Preferred technology:
+
+- TypeScript
+- Three.js
+- WebGL/WebGPU where appropriate
+- Vite
+
+Use a clean modular architecture.
+
+Suggested structure:
+
+src/
+  core/
+  world/
+  terrain/
+  roads/
+  cities/
+  biomes/
+  vehicles/
+  traffic/
+  buildings/
+  vegetation/
+  weather/
+  audio/
+  camera/
+  ui/
+  rendering/
+  utils/
+
+Keep systems modular.
+
+Do not put the entire game into one giant file.
+
+---
+
+# 22. PERFORMANCE
+
+Performance is extremely important.
+
+Target:
+
+60 FPS on a reasonably modern desktop/laptop.
+
+Use:
+
+- Object instancing
+- LOD
+- Frustum culling
+- Distance-based rendering
+- Chunk streaming
+- Object pooling
+- Texture atlases where useful
+- Simplified distant geometry
+- Efficient collision detection
+
+Do not create unnecessary physics objects.
+
+Traffic AI should only run at full detail near the player.
+
+Distant traffic can use simplified simulation.
+
+---
+
+# 23. INFINITE WORLD TECHNIQUE
+
+The world should effectively be infinite.
+
+Avoid allowing floating-point precision problems during extremely long journeys.
+
+Consider a floating-origin/re-centering system.
+
+The player should be able to drive extremely far without the world becoming unstable.
+
+The world seed and logical coordinates must remain consistent even when rendering coordinates are shifted.
+
+---
+
+# 24. UI
+
+Create a minimal modern UI.
+
+Main menu:
+
+PLAY
+SETTINGS
+CONTROLS
+ABOUT
+
+In-game HUD should be minimal.
+
+Show optionally:
+
+- Speed
+- Distance traveled
+- Current biome
+- Time
+- Weather
+
+Avoid clutter.
+
+The game should primarily feel like an exploration experience.
+
+---
+
+# 25. EXPLORATION FEATURES
+
+Track:
+
+- Distance traveled
+- Cities visited
+- Biomes discovered
+- Landmarks discovered
+
+Optionally add achievements such as:
+
+"First City"
+
+"100 km"
+
+"Mountain Explorer"
+
+"Coastal Drive"
+
+"Night Driver"
+
+"Long Haul"
+
+Do not make these mandatory.
+
+---
+
+# 26. WORLD CONSISTENCY
+
+This is extremely important.
+
+If the player turns around and drives back, the world should still be recognizable.
+
+Do NOT regenerate completely different terrain every time a chunk is loaded.
+
+The procedural seed must guarantee deterministic results.
+
+Road networks must remain consistent.
+
+Cities must remain consistent.
+
+Landmarks must remain consistent.
+
+---
+
+# 27. NO FAKE INFINITE LOOP
+
+Do not implement the world by secretly looping the same terrain/road.
+
+The player should be able to travel in different directions and discover different procedural environments.
+
+The system should generate a genuinely large procedural world.
+
+---
+
+# 28. DEVELOPMENT APPROACH
+
+Do not attempt to build every feature simultaneously.
+
+Build in stages.
+
+## PHASE 1 — PLAYABLE PROTOTYPE
+
+Create:
+
+- Three.js application
+- Basic car
+- Third-person camera
+- Procedural terrain
+- Procedural road
+- Chunk streaming
+- Basic driving
+
+The player must already be able to drive indefinitely.
+
+## PHASE 2 — ROAD NETWORK
+
+Add:
+
+- Road graph
+- Branching roads
+- Intersections
+- Turns
+- Different road types
+
+## PHASE 3 — BIOMES
+
+Add:
+
+- Forest
+- Countryside
+- Mountain
+- Coast
+- Village
+
+## PHASE 4 — TOWNS AND CITIES
+
+Add:
+
+- Town generator
+- Suburbs
+- City generator
+- Downtown
+- City road networks
+
+## PHASE 5 — TRAFFIC
+
+Add AI vehicles.
+
+## PHASE 6 — ATMOSPHERE
+
+Add:
+
+- Time of day
+- Weather
+- Lighting
+- Audio
+
+## PHASE 7 — POLISH
+
+Add:
+
+- Landmarks
+- Better buildings
+- Better vegetation
+- UI
+- Settings
+- Performance optimization
+
+---
+
+# 29. IMPORTANT AGENT BEHAVIOR
+
+You are an autonomous senior developer.
+
+Before implementing a system, inspect the existing project.
+
+Do not unnecessarily rewrite working code.
+
+Keep the architecture maintainable.
+
+When you encounter a difficult technical problem, solve it systematically rather than replacing the feature with a fake approximation.
+
+Do not create placeholder systems and then declare the feature complete.
+
+If a feature cannot reasonably be implemented yet, clearly identify it as incomplete.
+
+After every major implementation:
+
+1. Run the application.
+2. Check for TypeScript errors.
+3. Check browser console errors.
+4. Test the feature.
+5. Fix problems before moving on.
+
+Do not leave obvious errors behind.
+
+---
+
+# 30. PRIORITY ORDER
+
+When tradeoffs are necessary, prioritize:
+
+1. Driving feel
+2. Seamless world streaming
+3. Road generation
+4. World variety
+5. City transitions
+6. Performance
+7. Traffic
+8. Visual polish
+9. Weather
+10. Extra features
+
+A smaller world that feels seamless is better than a visually impressive world that constantly breaks.
+
+---
+
+# 31. FINAL EXPERIENCE TARGET
+
+The final experience should feel like:
+
+> "I can get into my car, choose a direction, and just drive."
+
+The player should be able to start in a quiet forest road, drive for a while, discover a small village, continue onto a highway, see a city skyline in the distance, enter the suburbs, drive through downtown, leave the city on another road, climb through mountains, reach the coast, and continue indefinitely.
+
+There should be no obvious moment where the player thinks:
+
+"Now the game has generated a new level."
+
+It should feel like one continuous world.
+
+Build the foundation properly first. Do not rush to add superficial features before the procedural world, road network, streaming system, and driving are solid.
